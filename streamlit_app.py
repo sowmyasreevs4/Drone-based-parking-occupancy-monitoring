@@ -1,3 +1,4 @@
+# === GPS AUTO-DETECT VERSION - Aug 19 08:10 ===
 """
 Drone-Based Parking Occupancy Monitoring — Streamlit version
 --------------------------------------------------------------
@@ -32,6 +33,9 @@ import torch
 from PIL import Image
 from sahi import AutoDetectionModel
 from sahi.predict import get_prediction
+
+import gps_utils
+import site_geo
 
 # ---------------------------------------------------------------------------
 # Configuration
@@ -471,6 +475,118 @@ def list_sample_images():
 
 
 # ---------------------------------------------------------------------------
+# GPS-based automatic site identification
+# (suggested by Ben Bartlett: read image metadata and auto-select the correct
+# manually annotated site, rather than requiring a manual dropdown)
+#
+# Reuses the existing verbatim-ported functions above unchanged:
+#   - direct match: load_site_coco + load_space_polygons_from_json + rescale_poly
+#   - repeat-visit match: transfer_annotation (SIFT+RANSAC homography, unchanged)
+# ---------------------------------------------------------------------------
+DIMENSION_MATCH_TOLERANCE = 0.02  # 2% -- treat near-identical resolutions as "same capture setup"
+
+
+def resolve_annotation_candidate(candidate_site_keys, image_rgb):
+    """
+    Given a shortlist of annotation site_keys physically located at the GPS-matched
+    car park (e.g. ["Foundation", "Foundation118m"] -- same site, two different
+    capture sessions), decide which applies to this new image and how:
+
+      1. DIRECT MATCH -- this image's resolution closely matches an existing
+         annotation's own COCO resolution. No CV needed; rescale and reuse.
+      2. HOMOGRAPHY TRANSFER -- resolution differs (different day / altitude /
+         camera position). Try transfer_annotation() against each candidate in
+         turn and keep the first one that is accepted (passes the existing
+         validity check in transfer_annotation/validate_homography).
+
+    This is the "different days of the same car park" case Ben asked the demo
+    to show: GPS narrows down WHICH car park, this function works out WHICH of
+    that car park's saved annotations fits this specific photo.
+
+    Returns: (bay_polys_in_image_coords, chosen_site_key, method, message)
+    """
+    img_h, img_w = image_rgb.shape[:2]
+
+    # --- Pass 1: direct resolution match (fast path, no CV) ---
+    for site_key in candidate_site_keys:
+        coco = load_site_coco(site_key)
+        if not coco:
+            continue
+        try:
+            _, (coco_w, coco_h), _ = load_space_polygons_from_json(coco)
+        except (KeyError, IndexError):
+            continue
+        if not coco_w or not coco_h:
+            continue
+        dw = abs(img_w - coco_w) / coco_w
+        dh = abs(img_h - coco_h) / coco_h
+        if dw <= DIMENSION_MATCH_TOLERANCE and dh <= DIMENSION_MATCH_TOLERANCE:
+            bay_polys, _, (n_seg, n_box) = load_space_polygons_from_json(coco)
+            sx, sy = img_w / coco_w, img_h / coco_h
+            bay_polys = [rescale_poly(p, sx, sy) for p in bay_polys]
+            return (
+                bay_polys,
+                site_key,
+                "direct",
+                f"Image resolution ({img_w}x{img_h}) matches the existing '{site_key}' "
+                f"annotation ({coco_w}x{coco_h}) -- reused directly, no transfer needed.",
+            )
+
+    # --- Pass 2: no direct match -- try homography transfer against each
+    #     candidate reference image in turn, keep the first VALID result ---
+    failures = []
+    for site_key in candidate_site_keys:
+        warped_bays, status_msg = transfer_annotation(site_key, image_rgb)
+        if warped_bays is not None:
+            return (
+                warped_bays,
+                site_key,
+                "homography",
+                f"No matching resolution found -- transferred the '{site_key}' annotation. {status_msg}",
+            )
+        failures.append(f"{site_key}: {status_msg}")
+
+    fail_msg = "; ".join(failures) if failures else "no usable reference images for this site."
+    return None, None, None, f"Could not match this image to any existing annotation. {fail_msg}"
+
+
+def identify_site_from_image(pil_image, image_rgb):
+    """
+    Full auto-detect flow: read GPS EXIF -> match against known car park
+    boundaries (point-in-polygon against the UL KML) -> resolve which of that
+    site's saved annotations applies to this specific image.
+
+    Returns: (bay_polys, chosen_site_key, kml_display_name, method, message)
+    All fields except `message` are None if identification failed at any stage.
+    """
+    gps = gps_utils.extract_gps(pil_image)
+    if gps is None:
+        return None, None, None, None, (
+            "No GPS metadata found in this image's EXIF. Auto-detect requires the "
+            "original DJI Mini 3 photo (GPS is stripped by many messaging apps and "
+            "screenshot tools, and by Streamlit's own image widget if re-saved) -- "
+            "use the manual tabs instead."
+        )
+
+    lat, lon, altitude = gps
+    match = site_geo.identify_site_candidates(lat, lon)
+    if match is None:
+        return None, None, None, None, (
+            f"GPS position ({lat:.6f}, {lon:.6f}) does not fall inside any car park "
+            f"with an existing bay annotation. Use the manual tabs instead."
+        )
+
+    kml_name, display_name, candidate_keys = match
+    bay_polys, chosen_key, method, resolve_msg = resolve_annotation_candidate(candidate_keys, image_rgb)
+    if bay_polys is None:
+        return None, None, display_name, None, f"GPS matched this image to {display_name}, but {resolve_msg}"
+
+    alt_note = f", altitude {altitude:.1f} m" if altitude else ""
+    message = f"GPS ({lat:.6f}, {lon:.6f}{alt_note}) matched to {display_name}. {resolve_msg}"
+    return bay_polys, chosen_key, display_name, method, message
+
+
+# ---------------------------------------------------------------------------
 # Streamlit UI
 # ---------------------------------------------------------------------------
 st.set_page_config(page_title="Drone-Based Parking Occupancy Monitoring", layout="wide")
@@ -496,7 +612,93 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-tab1, tab2 = st.tabs(["Detect on a known image", "New photo of an existing car park (auto-transfer annotation)"])
+tab0, tab1, tab2 = st.tabs([
+    "✨ Auto-detect (GPS)",
+    "Detect on a known image",
+    "New photo of an existing car park (auto-transfer annotation)",
+])
+
+with tab0:
+    st.markdown(
+        "Upload a **DJI Mini 3 photo directly** (not a re-saved or screenshotted copy -- those "
+        "strip GPS metadata). The site is identified automatically from the photo's GPS position "
+        "against the UL car park boundaries -- no need to say which car park this is, or whether "
+        "it needs a fresh overlay or a homography transfer from an earlier visit. This uses the "
+        "same point-in-polygon method as the thesis's multi-site validation (Section 4.4)."
+    )
+    col1, col2 = st.columns([1, 2])
+    with col1:
+        st.markdown("#### 1 · Upload a drone photo")
+        auto_upload = st.file_uploader(
+            "Aerial image (original file, GPS EXIF required)", type=["jpg", "jpeg", "png"], key="up0"
+        )
+        auto_pil_image = None
+        auto_image_rgb = None
+        if auto_upload is not None:
+            auto_pil_image = Image.open(auto_upload)
+            auto_image_rgb = np.array(auto_pil_image.convert("RGB"))
+            st.image(auto_image_rgb, caption="Uploaded image", use_container_width=True)
+
+        st.markdown("#### 2 · Configure")
+        occ_frac0 = st.slider(
+            "Occupancy threshold (bay is occupied if a car covers >= this fraction of the bay polygon)",
+            0.05, 0.6, OCC_FRAC_DEFAULT, 0.01, key="occ0",
+        )
+        auto_clicked = st.button("▶  Auto-Detect & Run", key="run0")
+
+    with col2:
+        st.markdown("#### 3 · Results")
+        if auto_clicked:
+            if auto_image_rgb is None:
+                st.warning("Please upload an image first.")
+            else:
+                with st.spinner("Reading GPS, identifying site, running detection..."):
+                    bay_polys, site_key, display_name, method, id_message = identify_site_from_image(
+                        auto_pil_image, auto_image_rgb
+                    )
+                    kept, removed = run_detection_on_image(auto_image_rgb)
+                    det_img = draw_detections(auto_image_rgb, kept)
+                    vehicles = [d for d in kept if d.category_group == "vehicle"]
+
+                lines = [
+                    id_message,
+                    "",
+                    f"Detected {len(kept)} kept object(s) ({len(vehicles)} vehicles), "
+                    f"{len(removed)} duplicate(s) removed, at confidence >= {CONFIDENCE_THRESHOLD}.",
+                ]
+
+                occ_img = None
+                if bay_polys:
+                    vehicle_boxes = [[d.x1, d.y1, d.x2, d.y2] for d in vehicles]
+                    occ_img, occupied, available, capacity = compute_occupancy_map(
+                        auto_image_rgb, bay_polys, vehicle_boxes, occ_frac0
+                    )
+                    method_label = {"direct": "direct overlay", "homography": "homography transfer"}.get(
+                        method, method
+                    )
+                    lines.append(
+                        f"Bay-level occupancy via {method_label} ({capacity} bays): "
+                        f"{occupied} occupied, {available} available "
+                        f"(occupancy threshold = {occ_frac0})."
+                    )
+                else:
+                    lines.append("No bay-level occupancy computed -- see message above.")
+
+                c1, c2 = st.columns(2)
+                with c1:
+                    st.image(det_img, caption="Detection output", use_container_width=True)
+                with c2:
+                    if occ_img is not None:
+                        st.image(
+                            occ_img, caption="Bay-level occupancy (green=free, red=occupied)",
+                            use_container_width=True,
+                        )
+                st.text_area("Site identification & summary", "\n".join(lines), height=140)
+
+    st.caption(
+        "No GPS in the photo, or the site has no saved annotation yet? Use the manual tabs "
+        "instead -- nothing about them has changed."
+    )
 
 with tab1:
     site_choices = ["(none — detection only)"] + list_annotation_sites()
