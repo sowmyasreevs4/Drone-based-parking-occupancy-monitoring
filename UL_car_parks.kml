@@ -1,0 +1,448 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
+<Document id="document">
+	<name>UL_car_parks</name>
+	<gx:CascadingStyle kml:id="__managed_style_24BF61BB893FBA9A17A0">
+		<Style>
+			<IconStyle>
+				<scale>1.2</scale>
+				<Icon>
+					<href>https://earth.google.com/earth/document/icon?color=1976d2&amp;id=2000&amp;scale=4</href>
+				</Icon>
+				<hotSpot x="64" y="128" xunits="pixels" yunits="insetPixels"/>
+			</IconStyle>
+			<LineStyle>
+				<color>ff2dc0fb</color>
+				<width>3</width>
+			</LineStyle>
+			<PolyStyle>
+				<color>40ffffff</color>
+			</PolyStyle>
+			<BalloonStyle>
+				<displayMode>hide</displayMode>
+			</BalloonStyle>
+		</Style>
+	</gx:CascadingStyle>
+	<gx:CascadingStyle kml:id="__managed_style_15AA9F83BB3FBA9A17A0">
+		<Style>
+			<IconStyle>
+				<Icon>
+					<href>https://earth.google.com/earth/document/icon?color=1976d2&amp;id=2000&amp;scale=4</href>
+				</Icon>
+				<hotSpot x="64" y="128" xunits="pixels" yunits="insetPixels"/>
+			</IconStyle>
+			<LineStyle>
+				<color>ff2dc0fb</color>
+				<width>2</width>
+			</LineStyle>
+			<PolyStyle>
+				<color>40ffffff</color>
+			</PolyStyle>
+			<BalloonStyle>
+				<displayMode>hide</displayMode>
+			</BalloonStyle>
+		</Style>
+	</gx:CascadingStyle>
+	<StyleMap id="__managed_style_0467B3A5983FBA9A17A0">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#__managed_style_15AA9F83BB3FBA9A17A0</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#__managed_style_24BF61BB893FBA9A17A0</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Placemark id="0F34B8D8B83FBA9D9974">
+		<name>car park 1</name>
+		<LookAt>
+			<longitude>-8.57407775670476</longitude>
+			<latitude>52.67488497942494</latitude>
+			<altitude>7.836507819994112</altitude>
+			<heading>0</heading>
+			<tilt>0</tilt>
+			<gx:fovy>35</gx:fovy>
+			<range>508.3531278778537</range>
+			<altitudeMode>absolute</altitudeMode>
+		</LookAt>
+		<styleUrl>#__managed_style_0467B3A5983FBA9A17A0</styleUrl>
+		<Polygon>
+			<outerBoundaryIs>
+				<LinearRing>
+					<coordinates>
+						-8.576482914036728,52.67423490817132,0 -8.574879101225509,52.67427441727347,0 -8.573878315052927,52.6750016050545,0 -8.573626080183855,52.67492498252094,0 -8.573308639555181,52.6751719254145,0 -8.573658614489094,52.67546337200268,0 -8.576547303117025,52.67535378700538,0 -8.576482914036728,52.67423490817132,0 
+					</coordinates>
+				</LinearRing>
+			</outerBoundaryIs>
+		</Polygon>
+	</Placemark>
+	<Placemark id="0CE264C3563FBAA11F24">
+		<name>car park 2</name>
+		<LookAt>
+			<longitude>-8.576813968894035</longitude>
+			<latitude>52.67332709212674</latitude>
+			<altitude>7.309702436860219</altitude>
+			<heading>0</heading>
+			<tilt>0</tilt>
+			<gx:fovy>35</gx:fovy>
+			<range>567.3763216586668</range>
+			<altitudeMode>absolute</altitudeMode>
+		</LookAt>
+		<styleUrl>#__managed_style_0467B3A5983FBA9A17A0</styleUrl>
+		<Polygon>
+			<outerBoundaryIs>
+				<LinearRing>
+					<coordinates>
+						-8.578888678480546,52.67343201100451,0 -8.578873824682963,52.67278601026975,0 -8.577983685126858,52.67267335374068,0 -8.578063647884175,52.67358830182361,0 -8.578673840667186,52.67355706150173,0 -8.578888678480546,52.67343201100451,0 
+					</coordinates>
+				</LinearRing>
+			</outerBoundaryIs>
+		</Polygon>
+	</Placemark>
+	<Placemark id="0824EA5EB33FBAAB7FA6">
+		<name>car park 14</name>
+		<LookAt>
+			<longitude>-8.57746706510255</longitude>
+			<latitude>52.6720797376874</latitude>
+			<altitude>9.315992310252362</altitude>
+			<heading>0</heading>
+			<tilt>0</tilt>
+			<gx:fovy>35</gx:fovy>
+			<range>396.3351411993062</range>
+			<altitudeMode>absolute</altitudeMode>
+		</LookAt>
+		<styleUrl>#__managed_style_0467B3A5983FBA9A17A0</styleUrl>
+		<Polygon>
+			<outerBoundaryIs>
+				<LinearRing>
+					<coordinates>
+						-8.577778620383063,52.67234898171617,0 -8.577539064530509,52.67199441795901,0 -8.576196197272287,52.67208557018674,0 -8.576360463665774,52.67243712063776,0 -8.577549614002644,52.67240651348066,0 -8.577778620383063,52.67234898171617,0 
+					</coordinates>
+				</LinearRing>
+			</outerBoundaryIs>
+		</Polygon>
+	</Placemark>
+	<Placemark id="0452D814883FBAB58058">
+		<name>car park 15</name>
+		<LookAt>
+			<longitude>-8.573310949328844</longitude>
+			<latitude>52.67457093719514</latitude>
+			<altitude>27.21397516755884</altitude>
+			<heading>0</heading>
+			<tilt>0</tilt>
+			<gx:fovy>35</gx:fovy>
+			<range>296.3393057758731</range>
+			<altitudeMode>absolute</altitudeMode>
+		</LookAt>
+		<styleUrl>#__managed_style_0467B3A5983FBA9A17A0</styleUrl>
+		<Polygon>
+			<outerBoundaryIs>
+				<LinearRing>
+					<coordinates>
+						-8.572787973593186,52.67462702696093,0 -8.572737011910903,52.67435319472841,0 -8.5721573921203,52.67439872316267,0 -8.572203068180054,52.67458447393476,0 -8.571943757170018,52.6745965503885,0 -8.571985548835926,52.67478008064707,0 -8.572787973593186,52.67462702696093,0 
+					</coordinates>
+				</LinearRing>
+			</outerBoundaryIs>
+		</Polygon>
+	</Placemark>
+	<Placemark id="0E8F0C11823FBAD0414C">
+		<name>car park 13</name>
+		<LookAt>
+			<longitude>-8.577839012636451</longitude>
+			<latitude>52.6751952381694</latitude>
+			<altitude>14.79488208944494</altitude>
+			<heading>359.9956094239669</heading>
+			<tilt>0</tilt>
+			<gx:fovy>35</gx:fovy>
+			<range>621.1585039618514</range>
+			<altitudeMode>absolute</altitudeMode>
+		</LookAt>
+		<styleUrl>#__managed_style_0467B3A5983FBA9A17A0</styleUrl>
+		<Polygon>
+			<outerBoundaryIs>
+				<LinearRing>
+					<coordinates>
+						-8.578958686657831,52.67554518851529,0 -8.57998933065209,52.67521475852542,0 -8.580904068974007,52.67470591571172,0 -8.58050257481287,52.67444030804866,0 -8.578466786316421,52.67448226166631,0 -8.578189383290171,52.67506575544,0 -8.578584401674274,52.67554606885811,0 -8.578958686657831,52.67554518851529,0 
+					</coordinates>
+				</LinearRing>
+			</outerBoundaryIs>
+		</Polygon>
+	</Placemark>
+	<Placemark id="0A0DCD81DF3FBE6C61BB">
+		<name>car park 6</name>
+		<LookAt>
+			<longitude>-8.567972014137958</longitude>
+			<latitude>52.67358015952664</latitude>
+			<altitude>31.80736645937487</altitude>
+			<heading>359.9955458430827</heading>
+			<tilt>0</tilt>
+			<gx:fovy>35</gx:fovy>
+			<range>411.5175813047244</range>
+			<altitudeMode>absolute</altitudeMode>
+		</LookAt>
+		<styleUrl>#__managed_style_0467B3A5983FBA9A17A0</styleUrl>
+		<Polygon>
+			<outerBoundaryIs>
+				<LinearRing>
+					<coordinates>
+						-8.566787379101731,52.67341324926155,0 -8.566233729029584,52.67341980790859,0 -8.566285779123568,52.67418607060282,0 -8.566900691433908,52.67417285946844,0 -8.566787379101731,52.67341324926155,0 
+					</coordinates>
+				</LinearRing>
+			</outerBoundaryIs>
+		</Polygon>
+	</Placemark>
+	<Placemark id="0BB282874D3FBE6F5844">
+		<name>car park 8</name>
+		<LookAt>
+			<longitude>-8.567569049668135</longitude>
+			<latitude>52.6735343631865</latitude>
+			<altitude>17.83494534803076</altitude>
+			<heading>359.9955452255858</heading>
+			<tilt>0</tilt>
+			<gx:fovy>35</gx:fovy>
+			<range>190.1079080862837</range>
+			<altitudeMode>absolute</altitudeMode>
+		</LookAt>
+		<styleUrl>#__managed_style_0467B3A5983FBA9A17A0</styleUrl>
+		<Polygon>
+			<outerBoundaryIs>
+				<LinearRing>
+					<coordinates>
+						-8.567513523927481,52.67330408097585,0 -8.567696636406181,52.67328894245203,0 -8.567727725268275,52.67336910839779,0 -8.567702604759331,52.67320374053363,0 -8.566805090507364,52.67327752173874,0 -8.566844370129319,52.67342625070575,0 -8.567535310910218,52.67338643208514,0 -8.567513523927481,52.67330408097585,0 
+					</coordinates>
+				</LinearRing>
+			</outerBoundaryIs>
+		</Polygon>
+	</Placemark>
+	<Placemark id="03DEAF47B53FBE74F9B9">
+		<name>car park 5</name>
+		<LookAt>
+			<longitude>-8.56718402383409</longitude>
+			<latitude>52.67305289028069</latitude>
+			<altitude>15.80664299667557</altitude>
+			<heading>359.9955175879805</heading>
+			<tilt>0</tilt>
+			<gx:fovy>35</gx:fovy>
+			<range>131.0871479534035</range>
+			<altitudeMode>absolute</altitudeMode>
+		</LookAt>
+		<styleUrl>#__managed_style_0467B3A5983FBA9A17A0</styleUrl>
+		<Polygon>
+			<outerBoundaryIs>
+				<LinearRing>
+					<coordinates>
+						-8.567812334664294,52.67301205746273,0 -8.567743754493831,52.67281635809451,0 -8.567074701824206,52.6728946222722,0 -8.566784609193489,52.67297087736747,0 -8.566850022505685,52.67312424886467,0 -8.567812334664294,52.67301205746273,0 
+					</coordinates>
+				</LinearRing>
+			</outerBoundaryIs>
+		</Polygon>
+	</Placemark>
+	<Placemark id="026B68D18A3FBE8DB68B">
+		<name>car park 9</name>
+		<LookAt>
+			<longitude>-8.565706642355476</longitude>
+			<latitude>52.67169188716655</latitude>
+			<altitude>19.75238291109659</altitude>
+			<heading>359.9955085130445</heading>
+			<tilt>0</tilt>
+			<gx:fovy>35</gx:fovy>
+			<range>341.2492884649328</range>
+			<altitudeMode>absolute</altitudeMode>
+		</LookAt>
+		<styleUrl>#__managed_style_0467B3A5983FBA9A17A0</styleUrl>
+		<Polygon>
+			<outerBoundaryIs>
+				<LinearRing>
+					<coordinates>
+						-8.565872039451456,52.67089604998015,0 -8.565167180148601,52.67095209905987,0 -8.565161346750246,52.67165089195792,0 -8.565361348961579,52.67221708104664,0 -8.565805459578121,52.67222979546095,0 -8.566146407637685,52.67214398188454,0 -8.565872039451456,52.67089604998015,0 
+					</coordinates>
+				</LinearRing>
+			</outerBoundaryIs>
+		</Polygon>
+	</Placemark>
+	<Placemark id="07EF38959D3FBE9C7B18">
+		<name>car park 11</name>
+		<LookAt>
+			<longitude>-8.569062152867286</longitude>
+			<latitude>52.67239267016551</latitude>
+			<altitude>14.55974376660712</altitude>
+			<heading>359.9954378438446</heading>
+			<tilt>0</tilt>
+			<gx:fovy>35</gx:fovy>
+			<range>296.850881748942</range>
+			<altitudeMode>absolute</altitudeMode>
+		</LookAt>
+		<styleUrl>#__managed_style_0467B3A5983FBA9A17A0</styleUrl>
+		<Polygon>
+			<outerBoundaryIs>
+				<LinearRing>
+					<coordinates>
+						-8.569726073964453,52.67263634995618,0 -8.569570607681017,52.6717916781597,0 -8.568682928938125,52.67184794888796,0 -8.568158431446728,52.67271589808008,0 -8.568375566075995,52.67274975033713,0 -8.569726073964453,52.67263634995618,0 
+					</coordinates>
+				</LinearRing>
+			</outerBoundaryIs>
+		</Polygon>
+	</Placemark>
+	<Placemark id="019A61AF623FBE9D6854">
+		<name>car park 3</name>
+		<LookAt>
+			<longitude>-8.568843423787097</longitude>
+			<latitude>52.67281330291467</latitude>
+			<altitude>14.55978026312115</altitude>
+			<heading>359.9954361259408</heading>
+			<tilt>0</tilt>
+			<gx:fovy>35</gx:fovy>
+			<range>369.1528698669572</range>
+			<altitudeMode>absolute</altitudeMode>
+		</LookAt>
+		<styleUrl>#__managed_style_0467B3A5983FBA9A17A0</styleUrl>
+		<Polygon>
+			<outerBoundaryIs>
+				<LinearRing>
+					<coordinates>
+						-8.570574884838992,52.67267915082861,0 -8.570556951669882,52.67253600394287,0 -8.568084080376856,52.67274753551444,0 -8.567763438748058,52.67281672562949,0 -8.56784795720646,52.67299199308419,0 -8.568399093518108,52.67294569191067,0 -8.570574884838992,52.67267915082861,0 
+					</coordinates>
+				</LinearRing>
+			</outerBoundaryIs>
+		</Polygon>
+	</Placemark>
+	<Placemark id="0D5E8E10D43FBEA11648">
+		<name>car park 12</name>
+		<LookAt>
+			<longitude>-8.576012277015872</longitude>
+			<latitude>52.68067294450378</latitude>
+			<altitude>8.37299336484733</altitude>
+			<heading>359.995419832938</heading>
+			<tilt>0</tilt>
+			<gx:fovy>35</gx:fovy>
+			<range>235.1146340750711</range>
+			<altitudeMode>absolute</altitudeMode>
+		</LookAt>
+		<styleUrl>#__managed_style_0467B3A5983FBA9A17A0</styleUrl>
+		<Polygon>
+			<outerBoundaryIs>
+				<LinearRing>
+					<coordinates>
+						-8.576697818296156,52.68053901531088,0 -8.576232822211159,52.68030289819933,0 -8.576069484626121,52.68036266132714,0 -8.575358441192808,52.6808506010277,0 -8.575717805599171,52.68105887031216,0 -8.575847209649076,52.68097653292956,0 -8.575920339075811,52.68101713210284,0 -8.576697818296156,52.68053901531088,0 
+					</coordinates>
+				</LinearRing>
+			</outerBoundaryIs>
+		</Polygon>
+	</Placemark>
+	<Placemark id="08C9551D873FBEAA4C04">
+		<name>car park 17</name>
+		<LookAt>
+			<longitude>-8.567920676175856</longitude>
+			<latitude>52.67977970747354</latitude>
+			<altitude>11.73229490798735</altitude>
+			<heading>156.9398998190299</heading>
+			<tilt>0</tilt>
+			<gx:fovy>35</gx:fovy>
+			<range>729.0616323604628</range>
+			<altitudeMode>absolute</altitudeMode>
+		</LookAt>
+		<styleUrl>#__managed_style_0467B3A5983FBA9A17A0</styleUrl>
+		<Polygon>
+			<outerBoundaryIs>
+				<LinearRing>
+					<coordinates>
+						-8.567518021319929,52.67892231288755,0 -8.567093747099651,52.67991717039109,0 -8.568231483397406,52.67993638213094,0 -8.568461879170087,52.67918410934767,0 -8.567518021319929,52.67892231288755,0 
+					</coordinates>
+				</LinearRing>
+			</outerBoundaryIs>
+		</Polygon>
+	</Placemark>
+	<Placemark id="06B0BD2CE23FBEAB4794">
+		<name>car park 16</name>
+		<LookAt>
+			<longitude>-8.568680890644222</longitude>
+			<latitude>52.6797023050564</latitude>
+			<altitude>18.33705622130304</altitude>
+			<heading>156.939899765921</heading>
+			<tilt>0</tilt>
+			<gx:fovy>35</gx:fovy>
+			<range>416.4344308777073</range>
+			<altitudeMode>absolute</altitudeMode>
+		</LookAt>
+		<styleUrl>#__managed_style_0467B3A5983FBA9A17A0</styleUrl>
+		<Polygon>
+			<outerBoundaryIs>
+				<LinearRing>
+					<coordinates>
+						-8.569349968767158,52.67920597206792,0 -8.569264401350246,52.67987028406942,0 -8.569269488653426,52.6803052935079,0 -8.569396941200182,52.68036408460605,0 -8.57021460168634,52.68032101166649,0 -8.570310037743747,52.67948679354537,0 -8.569443084300461,52.67914446257293,0 -8.569349968767158,52.67920597206792,0 
+					</coordinates>
+				</LinearRing>
+			</outerBoundaryIs>
+		</Polygon>
+	</Placemark>
+	<Placemark id="04B8A913E34113DDF44C">
+		<name>car park 10</name>
+		<LookAt>
+			<longitude>-8.564643294716745</longitude>
+			<latitude>52.67268952998904</latitude>
+			<altitude>20.1124321326602</altitude>
+			<heading>0</heading>
+			<tilt>0</tilt>
+			<gx:fovy>30</gx:fovy>
+			<range>212.3198359463277</range>
+			<altitudeMode>absolute</altitudeMode>
+		</LookAt>
+		<styleUrl>#__managed_style_0467B3A5983FBA9A17A0</styleUrl>
+		<Polygon>
+			<outerBoundaryIs>
+				<LinearRing>
+					<coordinates>
+						-8.565163455756306,52.67278417156514,0 -8.565146664860023,52.67242090855271,0 -8.565082895331734,52.67229190494813,0 -8.564658911574382,52.67231710615128,0 -8.564499366734843,52.67238919537009,0 -8.564395027971782,52.67239819461324,0 -8.564469313924102,52.67268205304414,0 -8.564406903807507,52.67274549706624,0 -8.564437951628262,52.67292278211277,0 -8.564711776066666,52.6729187411912,0 -8.564723843412539,52.67282835820827,0 -8.565163455756306,52.67278417156514,0 
+					</coordinates>
+				</LinearRing>
+			</outerBoundaryIs>
+		</Polygon>
+	</Placemark>
+	<Placemark id="0B0EFBF88A4113E4B174">
+		<name>car park 7</name>
+		<LookAt>
+			<longitude>-8.570747744142922</longitude>
+			<latitude>52.6745731534943</latitude>
+			<altitude>16.33888542531749</altitude>
+			<heading>0</heading>
+			<tilt>0</tilt>
+			<gx:fovy>30</gx:fovy>
+			<range>133.9194737727667</range>
+			<altitudeMode>absolute</altitudeMode>
+		</LookAt>
+		<styleUrl>#__managed_style_0467B3A5983FBA9A17A0</styleUrl>
+		<Polygon>
+			<outerBoundaryIs>
+				<LinearRing>
+					<coordinates>
+						-8.571080923154282,52.67456775531832,0 -8.570431252115567,52.67459495725794,0 -8.570431975376039,52.67463617378458,0 -8.570668706399253,52.67468542035277,0 -8.570814172068532,52.67468128795025,0 -8.571105872001931,52.6746363484592,0 -8.571080923154282,52.67456775531832,0 
+					</coordinates>
+				</LinearRing>
+			</outerBoundaryIs>
+		</Polygon>
+	</Placemark>
+	<Placemark id="07806D2A344113E87DE8">
+		<name>car park 4</name>
+		<LookAt>
+			<longitude>-8.56895034538837</longitude>
+			<latitude>52.67346254830615</latitude>
+			<altitude>14.17169344167401</altitude>
+			<heading>0</heading>
+			<tilt>0</tilt>
+			<gx:fovy>30</gx:fovy>
+			<range>292.884522348104</range>
+			<altitudeMode>absolute</altitudeMode>
+		</LookAt>
+		<styleUrl>#__managed_style_0467B3A5983FBA9A17A0</styleUrl>
+		<Polygon>
+			<outerBoundaryIs>
+				<LinearRing>
+					<coordinates>
+						-8.569547360575687,52.67356809721341,0 -8.569489220150533,52.67328484776093,0 -8.568496175016518,52.67333222006334,0 -8.568564122975229,52.67367448310852,0 -8.569547360575687,52.67356809721341,0 
+					</coordinates>
+				</LinearRing>
+			</outerBoundaryIs>
+		</Polygon>
+	</Placemark>
+</Document>
+</kml>
