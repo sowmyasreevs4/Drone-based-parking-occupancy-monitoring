@@ -1,4 +1,4 @@
-# === GPS AUTO-DETECT VERSION - Aug 19 08:10 ===
+# === GPS AUTO-DETECT VERSION v2 (fixed Foundation/Foundation118m mixup) - Aug 19 08:25 ===
 """
 Drone-Based Parking Occupancy Monitoring — Streamlit version
 --------------------------------------------------------------
@@ -507,7 +507,17 @@ def resolve_annotation_candidate(candidate_site_keys, image_rgb):
     """
     img_h, img_w = image_rgb.shape[:2]
 
-    # --- Pass 1: direct resolution match (fast path, no CV) ---
+    # Collect each candidate's stored COCO resolution up front, so we can tell
+    # whether dimension-matching is even a meaningful disambiguator for this
+    # family. If two candidates (e.g. Foundation / Foundation118m) were both
+    # exported from Roboflow at the SAME fixed size (a common Roboflow
+    # default such as 640x640), their stored width/height are identical --
+    # dimension matching can never tell them apart, and blindly trusting
+    # "first in the list" would silently always pick the wrong one for half
+    # of all real photos. In that case, skip Pass 1 entirely and let Pass 2's
+    # homography scoring (which looks at actual image content, not just
+    # metadata numbers) make the real decision instead.
+    candidate_dims = {}
     for site_key in candidate_site_keys:
         coco = load_site_coco(site_key)
         if not coco:
@@ -516,38 +526,112 @@ def resolve_annotation_candidate(candidate_site_keys, image_rgb):
             _, (coco_w, coco_h), _ = load_space_polygons_from_json(coco)
         except (KeyError, IndexError):
             continue
-        if not coco_w or not coco_h:
-            continue
-        dw = abs(img_w - coco_w) / coco_w
-        dh = abs(img_h - coco_h) / coco_h
-        if dw <= DIMENSION_MATCH_TOLERANCE and dh <= DIMENSION_MATCH_TOLERANCE:
-            bay_polys, _, (n_seg, n_box) = load_space_polygons_from_json(coco)
-            sx, sy = img_w / coco_w, img_h / coco_h
-            bay_polys = [rescale_poly(p, sx, sy) for p in bay_polys]
-            return (
-                bay_polys,
-                site_key,
-                "direct",
-                f"Image resolution ({img_w}x{img_h}) matches the existing '{site_key}' "
-                f"annotation ({coco_w}x{coco_h}) -- reused directly, no transfer needed.",
-            )
+        if coco_w and coco_h:
+            candidate_dims[site_key] = (coco_w, coco_h)
 
-    # --- Pass 2: no direct match -- try homography transfer against each
-    #     candidate reference image in turn, keep the first VALID result ---
+    dims_are_distinguishable = len(set(candidate_dims.values())) == len(candidate_dims) and len(candidate_dims) > 1
+
+    # --- Pass 1: direct resolution match (fast path, no CV) ---
+    # Only attempted when candidates actually have distinct stored resolutions,
+    # OR when there's only one candidate for this site (no ambiguity possible).
+    if dims_are_distinguishable or len(candidate_site_keys) == 1:
+        for site_key in candidate_site_keys:
+            if site_key not in candidate_dims:
+                continue
+            coco_w, coco_h = candidate_dims[site_key]
+            dw = abs(img_w - coco_w) / coco_w
+            dh = abs(img_h - coco_h) / coco_h
+            if dw <= DIMENSION_MATCH_TOLERANCE and dh <= DIMENSION_MATCH_TOLERANCE:
+                coco = load_site_coco(site_key)
+                bay_polys, _, (n_seg, n_box) = load_space_polygons_from_json(coco)
+                sx, sy = img_w / coco_w, img_h / coco_h
+                bay_polys = [rescale_poly(p, sx, sy) for p in bay_polys]
+                return (
+                    bay_polys,
+                    site_key,
+                    "direct",
+                    f"Image resolution ({img_w}x{img_h}) matches the existing '{site_key}' "
+                    f"annotation ({coco_w}x{coco_h}) -- reused directly, no transfer needed.",
+                )
+
+    # --- Pass 2: no direct match -- try homography transfer against EVERY
+    #     candidate reference image, and keep whichever produces the BEST
+    #     (highest inliers x footprint-coverage) valid result.
+    #
+    #     IMPORTANT: this does NOT stop at the first candidate that merely
+    #     passes validate_homography's area-fraction threshold. Because
+    #     "Foundation" and "Foundation118m" are the SAME physical car park
+    #     just at different altitudes, SIFT can find enough real (not just
+    #     repetitive-line) matches between them that a technically-valid but
+    #     WRONG homography can pass the threshold for the wrong candidate.
+    #     Scoring every candidate and keeping the strongest one avoids
+    #     "Foundation" incorrectly winning over "Foundation118m" (or vice
+    #     versa) just because it happened to be tried first. ---
+    best = None  # (score, warped_bays, site_key, status_msg)
     failures = []
     for site_key in candidate_site_keys:
-        warped_bays, status_msg = transfer_annotation(site_key, image_rgb)
-        if warped_bays is not None:
-            return (
-                warped_bays,
-                site_key,
-                "homography",
-                f"No matching resolution found -- transferred the '{site_key}' annotation. {status_msg}",
+        ref_path = REFERENCE_IMAGES.get(site_key)
+        if not ref_path or not os.path.exists(ref_path):
+            failures.append(f"{site_key}: no reference image found.")
+            continue
+
+        ref_img = cv2.imread(ref_path)
+        target_img = cv2.cvtColor(image_rgb, cv2.COLOR_RGB2BGR)
+        ref_gray, scale_ref = _to_gray_downscaled(ref_img, DETECT_MAX_DIM)
+        target_gray, scale_target = _to_gray_downscaled(target_img, DETECT_MAX_DIM)
+
+        try:
+            H, inliers, good_matches = compute_homography(ref_gray, target_gray, scale_ref, scale_target)
+        except RuntimeError as e:
+            failures.append(f"{site_key}: {e}")
+            continue
+
+        ref_h, ref_w = ref_img.shape[:2]
+        tgt_h, tgt_w = target_img.shape[:2]
+        valid, area_fraction = validate_homography(H, (ref_h, ref_w), (tgt_h, tgt_w))
+        if not valid:
+            failures.append(
+                f"{site_key}: homography rejected (only {area_fraction:.1%} footprint coverage, "
+                f"likely matched repetitive bay-line features rather than true correspondences)."
             )
-        failures.append(f"{site_key}: {status_msg}")
+            continue
+
+        # Score by inliers x coverage -- rewards both a well-matched geometry
+        # AND a plausible footprint, so a marginal, barely-valid match from
+        # the wrong candidate can't beat a strong match from the right one.
+        score = inliers * area_fraction
+
+        coco = load_site_coco(site_key)
+        if not coco:
+            failures.append(f"{site_key}: no bay annotation JSON found.")
+            continue
+        ref_bays, (coco_w, coco_h), _ = load_space_polygons_from_json(coco)
+        sx, sy = ref_w / coco_w, ref_h / coco_h
+        ref_bays = [rescale_poly(p, sx, sy) for p in ref_bays]
+        warped_bays = [warp_polygon([c for pt in bay for c in pt], H) for bay in ref_bays]
+
+        status_msg = (
+            f"Homography accepted: {inliers}/{good_matches} RANSAC inliers, "
+            f"warped reference footprint covers {area_fraction:.1%} of the target image. "
+            f"Transferred {len(warped_bays)} bay polygons from '{site_key}'."
+        )
+
+        if best is None or score > best[0]:
+            best = (score, warped_bays, site_key, status_msg)
+
+    if best is not None:
+        _, warped_bays, site_key, status_msg = best
+        return (
+            warped_bays,
+            site_key,
+            "homography",
+            f"No matching resolution found -- transferred the '{site_key}' annotation "
+            f"(best match among {len(candidate_site_keys)} candidate(s) for this site). {status_msg}",
+        )
 
     fail_msg = "; ".join(failures) if failures else "no usable reference images for this site."
     return None, None, None, f"Could not match this image to any existing annotation. {fail_msg}"
+
 
 
 def identify_site_from_image(pil_image, image_rgb):
