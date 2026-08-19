@@ -1,4 +1,4 @@
-# === GPS AUTO-DETECT VERSION v2 (fixed Foundation/Foundation118m mixup) - Aug 19 08:25 ===
+# === GPS AUTO-DETECT VERSION v3 (no emoji) - Aug 19 08:40 ===
 """
 Drone-Based Parking Occupancy Monitoring — Streamlit version
 --------------------------------------------------------------
@@ -697,7 +697,7 @@ st.markdown(
 )
 
 tab0, tab1, tab2 = st.tabs([
-    "✨ Auto-detect (GPS)",
+    "Auto-detect (GPS)",
     "Detect on a known image",
     "New photo of an existing car park (auto-transfer annotation)",
 ])
