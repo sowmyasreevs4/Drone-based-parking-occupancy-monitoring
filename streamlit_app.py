@@ -1,4 +1,4 @@
-# === SAHI LABEL REMOVED FROM UI (accurate: full-frame VisDrone, no tiling) - Aug 19 ===
+# === HERO BOX = TITLE ONLY, no subtitle text - Aug 19 ===
 """
 Drone-Based Parking Occupancy Monitoring — Streamlit version
 --------------------------------------------------------------
@@ -681,17 +681,12 @@ st.markdown(
     <style>
     .hero { background: linear-gradient(135deg, #1E2761 0%, #141A3D 100%);
         border-radius: 14px; padding: 26px 30px; margin-bottom: 22px; color: white; }
-    .hero h1 { color: #FFFFFF; margin: 0 0 6px 0; font-size: 26px; }
-    .hero p { color: #CADCFC; margin: 0; font-size: 14.5px; line-height: 1.5; }
+    .hero h1 { color: #FFFFFF; margin: 0; font-size: 26px; }
     div.stButton > button { background-color: #1E2761; color: white; font-weight: 600; border-radius: 8px; }
     div.stButton > button:hover { background-color: #2A3583; color: white; }
     </style>
     <div class="hero">
-      <h1>Drone-Based Parking Occupancy Monitoring</h1>
-      <p>Runs the project's actual detection script (VisDrone-trained YOLOv11x, full-frame
-      inference with the same deduplication logic) and the actual occupancy script (Sutherland-Hodgman polygon
-      overlap) from the MSc thesis <i>"Low-Cost Drone-Based Parking Occupancy Monitoring for
-      Smart Campus Mobility Management"</i> — University of Limerick.</p>
+      <h1>Low-Cost Drone-Based Parking Occupancy Monitoring for Smart Campus Mobility Management</h1>
     </div>
     """,
     unsafe_allow_html=True,
