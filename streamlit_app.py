@@ -1,4 +1,4 @@
-# === GPS AUTO-DETECT VERSION v3 (no emoji) - Aug 19 08:40 ===
+# === SAHI LABEL REMOVED FROM UI (accurate: full-frame VisDrone, no tiling) - Aug 19 ===
 """
 Drone-Based Parking Occupancy Monitoring — Streamlit version
 --------------------------------------------------------------
@@ -6,7 +6,8 @@ Uses the ACTUAL project scripts verbatim, adapted only to run on an in-memory
 uploaded image instead of a file-range batch job:
 
   - Detection + deduplication: ported directly from aerial_batch_run_detector_.py
-    (SAHI AutoDetectionModel + get_prediction, exact dedupe_within_groups logic)
+    (VisDrone-trained YOLOv11x via SAHI's AutoDetectionModel + get_prediction --
+    full-frame, non-sliced inference; exact dedupe_within_groups logic)
   - Occupancy calculation: ported directly from compute_availability.py
     (exact clip_polygon / polygon_area / overlap_fraction / load_space_polygons)
   - Bay-boundary transfer: ported directly from transfer_polygons.py
@@ -687,8 +688,8 @@ st.markdown(
     </style>
     <div class="hero">
       <h1>Drone-Based Parking Occupancy Monitoring</h1>
-      <p>Runs the project's actual detection script (SAHI + VisDrone-trained YOLOv11x, with the
-      same deduplication logic) and the actual occupancy script (Sutherland-Hodgman polygon
+      <p>Runs the project's actual detection script (VisDrone-trained YOLOv11x, full-frame
+      inference with the same deduplication logic) and the actual occupancy script (Sutherland-Hodgman polygon
       overlap) from the MSc thesis <i>"Low-Cost Drone-Based Parking Occupancy Monitoring for
       Smart Campus Mobility Management"</i> — University of Limerick.</p>
     </div>
